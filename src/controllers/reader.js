@@ -5,3 +5,9 @@ exports.create = async (req, res) => {
 
     res.status(201).json(newReader);
 };
+
+exports.readAll = async (req, res) => {
+    const readers = await Reader.findAll();
+
+    res.status(200).json(readers);
+}
