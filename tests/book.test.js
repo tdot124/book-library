@@ -58,7 +58,7 @@ describe('books', () => {
             expect(response.body.length).to.equal(3);
     
             response.body.forEach((book) => {
-              const expected = book.find((a) => a.id === book.id);
+              const expected = books.find((a) => a.id === book.id);
     
               expect(book.title).to.equal(expected.title);
               expect(book.author).to.equal(expected.author);
