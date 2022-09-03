@@ -1,42 +1,20 @@
 const { Book } = require('../models');
-const { createItem, getAll } = require('../helpers/controllerhelpers');
+const { createItem, getAll, getById, updateItemById, deleteItemById } = require('../helpers/controllerhelpers');
 
-exports.create = async (req, res) => {createItem(req,res,Book)};
-exports.readAll = async (req, res) => {getAll(res,Book)};
+exports.create = async (req, res) => {createItem(req,res,'book')};
+exports.readAll = async (_, res) => {getAll(res,'book')};
 
 exports.readById = async (req, res) => {
     const { bookId } = req.params;
-    const book = await Book.findByPk(bookId);
-    
-    if (!book) {
-        res.status(404).json({error: 'The book could not be found.'});
-    } else {
-        res.status(200).json(book);
-    }
-}
+    getById(bookId, res, 'book')
+};
 
 exports.updateById = async (req, res) => {
     const { bookId } = req.params;
-    const updateData = req.body;
-
-    const [updatedRows] = await Book.update(updateData, {where: {id: bookId}});
-
-    if (!updatedRows) {
-        res.status(404).json({error: 'The book could not be found.'});
-    } else {
-        res.status(200).json(updatedRows);
-    }
-}
+    updateItemById(bookId, req, res, 'book');
+};
 
 exports.deleteById = async (req, res) => {
     const { bookId } = req.params;
-
-    const deletedRows = await Book.destroy({where: {id: bookId} });
-
-    if (!deletedRows) {
-        res.status(404).json({error: 'The book could not be found.'});
-    } else {
-        res.status(204).json(deletedRows);
-    }
-    
-}
+    deleteItemById(bookId, res, 'book');    
+};

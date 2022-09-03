@@ -1,42 +1,20 @@
 const { Reader } = require('../models');
-const { createItem, getAll } = require('../helpers/controllerhelpers');
+const { createItem, getAll, getById, updateItemById, deleteItemById } = require('../helpers/controllerhelpers');
 
-exports.create = async (req, res) => {createItem(req,res,Reader)};
-exports.readAll = async (req, res) => {getAll(res,Reader)};
+exports.create = async (req, res) => {createItem(req,res,'reader')};
+exports.readAll = async (_, res) => {getAll(res,'reader')};
 
 exports.readById = async (req, res) => {
     const { readerId } = req.params;
-    const reader = await Reader.findByPk(readerId);
-    
-    if (!reader) {
-        res.status(404).json({error: 'The reader could not be found.'});
-    } else {
-        res.status(200).json(reader);
-    }
-}
+    getById(readerId, res, 'reader')
+};
 
 exports.updateById = async (req, res) => {
     const { readerId } = req.params;
-    const updateData = req.body;
-
-    const [updatedRows] = await Reader.update(updateData, {where: {id: readerId}});
-
-    if (!updatedRows) {
-        res.status(404).json({error: 'The reader could not be found.'});
-    } else {
-        res.status(200).json(updatedRows);
-    }
-}
+    updateItemById(readerId, req, res, 'reader');
+};
 
 exports.deleteById = async (req, res) => {
     const { readerId } = req.params;
-
-    const deletedRows = await Reader.destroy({where: {id: readerId} });
-
-    if (!deletedRows) {
-        res.status(404).json({error: 'The reader could not be found.'});
-    } else {
-        res.status(204).json(deletedRows);
-    }
-    
-}
+    deleteItemById(readerId, res, 'reader');    
+};
