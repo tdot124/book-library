@@ -1,13 +1,17 @@
 const { Book } = require('../models');
 
 exports.create = async (req, res) => {
-    const newBook = await Book.create(req.body);
+    try{
+        const newBook = await Book.create(req.body);
 
-    if (!newBook) {
-        res.status(404).json({error: 'Book not created'})
-    } else {
-        res.status(201).json(newBook);
-    }    
+        if (!newBook) {
+            res.status(404).json({error: 'Book not created'})
+        } else {
+            res.status(201).json(newBook);
+        }    
+    } catch (err) {
+        return res.status(400).json({err})
+    }
 };
 
 exports.readAll = async (req, res) => {

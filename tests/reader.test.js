@@ -28,6 +28,43 @@ describe('/readers', () => {
         expect(newReaderRecord.email).to.equal('future_ms_darcy@gmail.com')
         expect(newReaderRecord.password).to.equal('password');
       });
+
+      it('throws an error if invalid email is supplied', async() => {
+        const response = await request(app).post('/readers').send({
+          email: 'notanemail',
+        });
+        expect(response.status).to.equal(400);
+        });
+
+      it('throws an error if email is empty', async() => {
+        const response = await request(app).post('/readers').send({
+          email: '',
+        });
+        expect(response.status).to.equal(400);
+        });
+      
+      it('throws an error if name is empty', async() => {
+        const response = await request(app).post('/readers').send({
+          name: '',
+        });
+        expect(response.status).to.equal(400);
+        });
+
+      it('throws an error if password is empty', async() => {
+        const response = await request(app).post('/readers').send({
+          password: '',
+        });
+        expect(response.status).to.equal(400);
+        });
+
+      it('throws an error if password is less than 8 characters', async() => {
+        const response = await request(app).post('/readers').send({
+          password: 'shortpw',
+        });
+        expect(response.status).to.equal(400);
+        });
+
+
     });
   });
 
