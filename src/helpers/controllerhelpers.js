@@ -12,6 +12,18 @@ const createItem = async (req,res,model) => {
         }
 };
 
+const getAll = async (res,model) => {
+
+const items = await model.findAll();
+
+if (!items) {
+    res.status(404).json({error: `${model}Readers could not be found`})
+} else {
+    res.status(200).json(items);
+    }
+};
+
 module.exports = {
     createItem,
+    getAll,
 }
