@@ -1,6 +1,6 @@
-const createItem = async (res,model,item) => {
+const createItem = async (req,res,model) => {
     try{
-        const newItem = await model.create(item.body);   
+        const newItem = await model.create(req.body);   
     
         if (!newItem) {
             res.status(404).json({error: `${model} not created`})

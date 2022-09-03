@@ -1,19 +1,7 @@
 const { Reader } = require('../models');
+const { createItem } = require('../helpers/controllerhelpers');
 
-exports.create = async (req, res) => {
-
-    try{
-    const newReader = await Reader.create(req.body);   
-
-    if (!newReader) {
-        res.status(404).json({error: 'reader not created'})
-    } else {
-        res.status(201).json(newReader);
-    }    
-    } catch (err) {
-        return res.status(400).json({err})
-    }
-};
+exports.create = async (req, res) => {createItem(req,res,Reader)};
 
 exports.readAll = async (req, res) => {
     const readers = await Reader.findAll();
