@@ -1,5 +1,5 @@
 const { Genre } = require('../models');
-const { createItem, getAll, getById, updateItemById, deleteItemById } = require('../helpers/controllerhelpers');
+const { createItem, getAll, getById, updateItemById, deleteItemById } = require('./helpers');
 
 exports.create = async (req, res) => {createItem(req,res,'genre')};
 exports.readAll = async (_, res) => {getAll(res,'genre')};
