@@ -15,6 +15,13 @@ const getModel = (model) => {
       }
     };
 
+const removePassword = (obj) => {
+    if (obj.hasOwnProperty('password')) {
+        delete obj.password;
+    }
+    return obj;
+};
+
 const createItem = async (req,res,model) => {
     const Model = getModel(model);
     try{
@@ -23,7 +30,8 @@ const createItem = async (req,res,model) => {
         if (!newItem) {
             res.status(404).json({error: `${model} not created`})
         } else {
-            res.status(201).json(newItem);
+            const newItemWithoutPassword = removePassword(newItem.dataValues);
+            res.status(201).json(newItemWithoutPassword);
         }    
         } catch (err) {
             return res.status(400).json({err})
@@ -32,14 +40,9 @@ const createItem = async (req,res,model) => {
 
 const getAll = async (res,model) => {
     const Model = getModel(model);
-
-const items = await Model.findAll();
-
-if (!items) {
-    res.status(404).json({error: `${model} could not be found`})
-} else {
-    res.status(200).json(items);
-    }
+    const items = await Model.findAll();    
+    const itemsWithoutPassword = items.map((item) => removePassword(item.dataValues))
+    res.status(200).json(removePassword(itemsWithoutPassword));        
 };
 
 const getById = async (id,res,model) => {
@@ -49,7 +52,8 @@ const getById = async (id,res,model) => {
     if (!item) {
         res.status(404).json({error: `The ${model} could not be found.`});
     } else {
-        res.status(200).json(item);
+        const itemWithoutPassword = removePassword(item.dataValues)
+        res.status(200).json(itemWithoutPassword);
     }
 }
 
@@ -57,12 +61,13 @@ const updateItemById = async (itemId, req, res, model) => {
     const Model = getModel(model);
     const updateData = req.body;
 
-    const [updatedRows] = await Model.update(updateData, {where: {id: itemId}});
+    const findItem = await Model.findByPk(itemId);
 
-    if (!updatedRows) {
+    if (!findItem) {
         res.status(404).json({error: `The ${model} could not be found.`});
     } else {
-        res.status(200).json(updatedRows);
+        await Model.update(updateData, {where: {id: itemId}});    
+        res.status(200).json({result: `${model} updated`});
     }
 };
 
