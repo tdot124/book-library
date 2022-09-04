@@ -15,6 +15,12 @@ const getModel = (model) => {
       }
     };
 
+const includeOptions = (model) => {
+    if (model === 'book') return { include: [Genre, Author] };
+    if (model === 'genre') return { include: Book };
+    return {};
+}
+
 const removePassword = (obj) => {
     if (obj.hasOwnProperty('password')) {
         delete obj.password;
@@ -40,14 +46,16 @@ const createItem = async (req,res,model) => {
 
 const getAll = async (res,model) => {
     const Model = getModel(model);
-    const items = await Model.findAll();    
+    const include = includeOptions(model);
+    const items = await Model.findAll({ ...include });    
     const itemsWithoutPassword = items.map((item) => removePassword(item.dataValues))
     res.status(200).json(removePassword(itemsWithoutPassword));        
 };
 
 const getById = async (id,res,model) => {
     const Model = getModel(model);
-    const item = await Model.findByPk(id);
+    const include = includeOptions(model);
+    const item = await Model.findByPk(id, { ...include });
     
     if (!item) {
         res.status(404).json({error: `The ${model} could not be found.`});
