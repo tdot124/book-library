@@ -1,6 +1,6 @@
 module.exports = (connection, DataTypes) => {
     const schema = {
-        genre: {
+        author: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
@@ -17,6 +17,6 @@ module.exports = (connection, DataTypes) => {
         },
     };
 
-    const GenreModel = connection.define('Genre', schema);
-    return GenreModel;
+    const AuthorModel = connection.define('Author', schema);
+    return AuthorModel;
 };

@@ -1,4 +1,4 @@
-const { Reader, Book } = require('../models/index')
+const { Reader, Book, Author, Genre } = require('../models/index')
 
 const getModel = (model) => {
     if (model === 'reader') {

@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.use('/readers', readerRouter);
 app.use('/books', bookRouter);
-app.use('/author', authorRouter);
-app.use('/genre', genreRouter);
+app.use('/authors', authorRouter);
+app.use('/genres', genreRouter);
 
 module.exports = app
